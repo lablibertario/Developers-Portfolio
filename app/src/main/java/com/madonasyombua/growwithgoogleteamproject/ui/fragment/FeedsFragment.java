@@ -13,11 +13,9 @@
         limitations under the License.
  */
 package com.madonasyombua.growwithgoogleteamproject.ui.fragment;
-/**
- * Created by madona on 5/8/18.
- */
 
 import android.content.Context;
+//import android.content.SharedPreferences;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -44,9 +42,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.madonasyombua.growwithgoogleteamproject.R;
-import com.madonasyombua.growwithgoogleteamproject.adapter.FeedsAdapter;
-import com.madonasyombua.growwithgoogleteamproject.models.Paths;
-import com.madonasyombua.growwithgoogleteamproject.models.Post;
+
+import com.madonasyombua.growwithgoogleteamproject.ui.adapter.FeedsAdapter;
+import com.madonasyombua.growwithgoogleteamproject.data.models.Paths;
+import com.madonasyombua.growwithgoogleteamproject.data.models.Post;
+
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -148,13 +148,7 @@ public class FeedsFragment extends Fragment{
 
         FloatingActionButton fab =  view.findViewById(R.id.add_feeds);
         fab.setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        showPostDialog();
-                    }
-                }
+                v -> showPostDialog()
         );
 
         displayEmpty.setVisibility(View.GONE);
@@ -165,11 +159,8 @@ public class FeedsFragment extends Fragment{
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedsAdapter(Objects.requireNonNull(getActivity()), mPosts, new FeedsAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View caller) {
+        mAdapter = new FeedsAdapter(Objects.requireNonNull(getActivity()), mPosts, caller -> {
 
-            }
         }, true);
         mRecyclerView.setAdapter(mAdapter);
         startFeedListener();

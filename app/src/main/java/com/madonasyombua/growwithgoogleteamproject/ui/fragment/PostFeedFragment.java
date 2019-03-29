@@ -1,11 +1,8 @@
 /*Copyright (c) 2018 Madona Syombua
-
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
         You may obtain a copy of the License at
-
         http://www.apache.org/licenses/LICENSE-2.0
-
         Unless required by applicable law or agreed to in writing, software
         distributed under the License is distributed on an "AS IS" BASIS,
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +13,7 @@ package com.madonasyombua.growwithgoogleteamproject.ui.fragment;
 
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -45,13 +43,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.madonasyombua.growwithgoogleteamproject.R;
-import com.madonasyombua.growwithgoogleteamproject.models.Post;
+import com.madonasyombua.growwithgoogleteamproject.data.models.Post;
 import com.madonasyombua.growwithgoogleteamproject.util.BitmapHandler;
 
 import java.util.Objects;
@@ -160,63 +157,42 @@ public class PostFeedFragment extends DialogFragment {
         name.setText(getArguments().getString("username"));
 
         closeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dismiss();
-                    }
-                }
+                v -> dismiss()
         );
 
         imageButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
-                    }
+                v -> {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 }
         );
 
         cameraButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        //fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +
-                       //  File.separator + ""));
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                        startActivityForResult(cameraIntent, RESULT_CAMERA);
-                    }
+                v -> {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    //fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +
+                    //  File.separator + ""));
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                    startActivityForResult(cameraIntent, RESULT_CAMERA);
                 }
         );
 
         progressBar = view.findViewById(R.id.progressBar);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImageToServer();
-
-
-            }
-        });
+        sendButton.setOnClickListener(v -> uploadImageToServer());
 
         attachment.setVisibility(View.INVISIBLE);
         attachmentCloseButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            TransitionManager.endTransitions(attachment);
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            TransitionManager.beginDelayedTransition(attachment);
-                        }
-                        attachedImage.setImageBitmap(null);
-                        attachedImageName.setText("");
-                        attachment.setVisibility(View.INVISIBLE);
+                v -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        TransitionManager.endTransitions(attachment);
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        TransitionManager.beginDelayedTransition(attachment);
+                    }
+                    attachedImage.setImageBitmap(null);
+                    attachedImageName.setText("");
+                    attachment.setVisibility(View.INVISIBLE);
                 }
         );
 
@@ -241,7 +217,7 @@ public class PostFeedFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             System.out.println("resultCode: " + resultCode);
-            if (resultCode == Objects.requireNonNull(getActivity()).RESULT_OK && data != null) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     TransitionManager.endTransitions(attachment);
@@ -260,7 +236,7 @@ public class PostFeedFragment extends DialogFragment {
 
                     // Get the cursor
                     assert selectedImage != null;
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage,
+                    Cursor cursor = Objects.requireNonNull(getActivity()).getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
                     // Move to first row
                     assert cursor != null;
@@ -338,22 +314,19 @@ public class PostFeedFragment extends DialogFragment {
 
     public void uploadImageToServer() {
 
-       //TODO 1: Enable sending images to DataBase
+        //TODO 1: Enable sending images to DataBase
         //TODO 2: ensure we get the following
 
         Post post = new Post(postText.getText().toString(), currentUser.getDisplayName(), null);
-            reference.push().setValue(post, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference dataReference) {
-                    //String error = databaseError.toString();
-                    if(databaseError != null) {
-                        String error = databaseError.toString();
-                    }
-                   // Log.i("Firebase Debug", "The error is: " + databaseError.toString());
-                }
-            });
-            postText.setText("");
-            Toast.makeText(getContext(), "Sending Feeds", Toast.LENGTH_SHORT).show();
+        reference.push().setValue(post, (databaseError, dataReference) -> {
+            //String error = databaseError.toString();
+            if(databaseError != null) {
+                String error = databaseError.toString();
+            }
+            // Log.i("Firebase Debug", "The error is: " + databaseError.toString());
+        });
+        postText.setText("");
+        Toast.makeText(getContext(), "Sending Feeds", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -361,11 +334,11 @@ public class PostFeedFragment extends DialogFragment {
     @Override
     public void onResume() {
         // Get existing layout params for the window
-        ViewGroup.LayoutParams params = Objects.requireNonNull(getDialog().getWindow()).getAttributes();
+        WindowManager.LayoutParams params = Objects.requireNonNull(getDialog().getWindow()).getAttributes();
         // Assign window properties to fill the parent
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((WindowManager.LayoutParams) params);
+        getDialog().getWindow().setAttributes(params);
         // Call super onResume after sizing
         super.onResume();
     }

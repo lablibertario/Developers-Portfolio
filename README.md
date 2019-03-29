@@ -1,16 +1,18 @@
 <h1 align="center">Developers Portfolio</h1>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d9894982e1c9417baca62ffe04434bf5)](https://www.codacy.com/app/syombuamadona/Devs-Portfolio-App?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Madonahs/Devs-Portfolio-App&amp;utm_campaign=Badge_Grade) </a>
+
  <a target="_blank" href="LICENSE"><img src="http://img.shields.io/:license-apache-blue.svg" alt="License" /></a>
  
 </p>
 
 ## Developers Portfolio App
-
 This is a Social App for Developers to share their portfolio and also get to interact with other users through messages and sharing projects, programmers are welcome to share their projects and they can interact and show employers what they have done in the app, one doesnt have to create a website to showcase his/her work. 
 
-## Project status
-Develop 🔧
+## Note 
+ **We created this repository for educational purposes as part of the Grow With Google Scholarship.**
+ 
+## Mode
+Develop 
 
 ## Authors
 * **[Madona Syombua](https://github.com/Madonahs)** - *Lead/Core developer* 
@@ -26,13 +28,13 @@ Also checkout the entire list of [Contributors](https://github.com/Madonahs/Devs
 
 
 ### Maintainers
-* **[Madona Syombua](https://github.com/Madonahs)** 
+* **[Rado RAMBININTSOA](https://github.com/radoalbert110)** 
 * **[Ayobami Adewale](https://github.com/emmaunel)** 
 * **[Srinath](https://github.com/SrChip15)** 
 
 ## Contributing
 
-Read  [Contributing](https://gist.github.com/PurpleBooth/b24679402957c63ec426)
+Read  [Contributing](https://github.com/Madonahs/Developers-Portfolio/blob/master/CONTRIBUTING.md)
 
 ## Code of Conduct
 
@@ -99,4 +101,22 @@ These files are required in order for google sign in features to work.
 <img src="https://user-images.githubusercontent.com/11560987/37727626-575d4750-2d06-11e8-9c62-ff1c834e61d8.jpg" width="280"/> <img src="https://user-images.githubusercontent.com/11560987/37727634-5c2988b6-2d06-11e8-9a52-e6d8420bd665.jpg" width="280"/> <img src="https://user-images.githubusercontent.com/11560987/37727647-66431f24-2d06-11e8-92e8-981c31e4fdc6.jpg" width="280"/> 
 
 
+
+## Licence
+```
+ Copyright [2018] [Madona Syombua]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+```
 

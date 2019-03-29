@@ -1,11 +1,8 @@
 /*Copyright (c) 2018 Madona Syombua
-
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
         You may obtain a copy of the License at
-
         http://www.apache.org/licenses/LICENSE-2.0
-
         Unless required by applicable law or agreed to in writing, software
         distributed under the License is distributed on an "AS IS" BASIS,
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,11 +12,9 @@
 package com.madonasyombua.growwithgoogleteamproject.ui.fragment;
 
 import android.databinding.DataBindingUtil;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +22,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.madonasyombua.growwithgoogleteamproject.R;
-import com.madonasyombua.growwithgoogleteamproject.login.AppLoginManager;
-import com.madonasyombua.growwithgoogleteamproject.databinding.FragmentRegisterBinding;
-import com.madonasyombua.growwithgoogleteamproject.models.User;
+import com.madonasyombua.growwithgoogleteamproject.databinding.FragmentSignupBinding;
+import com.madonasyombua.growwithgoogleteamproject.ui.login.AppLoginManager;
 
-import com.madonasyombua.growwithgoogleteamproject.activities.LoginActivity;
+import com.madonasyombua.growwithgoogleteamproject.data.models.User;
+
+import com.madonasyombua.growwithgoogleteamproject.ui.activities.LoginActivity;
 
 
 import java.util.Objects;
@@ -45,7 +41,7 @@ import java.util.regex.Pattern;
 public class RegisterFragment extends Fragment {
     private static final String TAG =RegisterFragment.class.getName();
 
-    private FragmentRegisterBinding binding;
+    private FragmentSignupBinding binding;
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
@@ -57,26 +53,22 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
-        binding.registerFragmentButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View view) {
-                String username_txt = extractText(binding.editUsername);
-                String email_txt = extractText(binding.editEmail);
-                String password_txt = extractText(binding.editPassword);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false);
+        binding.registerFragmentButton.setOnClickListener(view -> {
+            String username_txt = extractText(binding.editUsername);
+            String email_txt = extractText(binding.editEmail);
+            String password_txt = extractText(binding.editPassword);
 
-                if (username_txt.isEmpty() || email_txt.isEmpty() || password_txt.isEmpty()) {
-                    // TODO add toast or change input color to show user that is required
-                    Toast.makeText(getContext(), "Username and password are required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // I added another parameter so that the username the user enter can be saved
-                AppLoginManager.registerUser(getActivity(), new User(username_txt, email_txt, password_txt), username_txt);
-                ((LoginActivity) Objects.requireNonNull(getActivity())).showHideProgressBar(true);
-                Toast.makeText(getActivity(), "Registering", Toast.LENGTH_SHORT).show();
+            if (username_txt.isEmpty() || email_txt.isEmpty() || password_txt.isEmpty()) {
+                // TODO add toast or change input color to show user that is required
+                Toast.makeText(getContext(), "Username and password are required", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // I added another parameter so that the username the user enter can be saved
+            AppLoginManager.registerUser(getActivity(), new User(username_txt, email_txt, password_txt), username_txt);
+            ((LoginActivity) Objects.requireNonNull(getActivity())).showHideProgressBar(true);
+            Toast.makeText(getActivity(), "Registering", Toast.LENGTH_SHORT).show();
         });
 
         return binding.getRoot();

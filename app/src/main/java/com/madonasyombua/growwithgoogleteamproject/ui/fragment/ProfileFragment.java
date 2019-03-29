@@ -33,15 +33,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.madonasyombua.growwithgoogleteamproject.R;
 import com.madonasyombua.growwithgoogleteamproject.databinding.FragmentProfileBinding;
 import com.madonasyombua.growwithgoogleteamproject.dialogs.ProfileFragmentDialog;
 import com.madonasyombua.growwithgoogleteamproject.interfaces.OnFragmentInteractionListener;
-import com.madonasyombua.growwithgoogleteamproject.models.User;
+import com.madonasyombua.growwithgoogleteamproject.data.models.User;
 import com.madonasyombua.growwithgoogleteamproject.util.Constant;
-import com.madonasyombua.growwithgoogleteamproject.util.FirebaseAction;
+import com.madonasyombua.growwithgoogleteamproject.data.actions.FirebaseAction;
 
 import java.util.Objects;
 
@@ -119,12 +117,9 @@ public class ProfileFragment extends Fragment
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
 
-        mBinding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog = new ProfileFragmentDialog();
-                dialog.show(getChildFragmentManager(), TAG);
-            }
+        mBinding.btnEditProfile.setOnClickListener(view -> {
+            dialog = new ProfileFragmentDialog();
+            dialog.show(getChildFragmentManager(), TAG);
         });
 
 
@@ -167,18 +162,15 @@ public class ProfileFragment extends Fragment
 
     @Override
     public void submit(Bundle data) {
-        user = User.build(user, data);
+        User.build(user, data);
 //        user.setPhone(PhoneNumberUtils.formatNumber(user.getPhone()));
         mBinding.setUser(user);
-        FirebaseAction.write(user, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError == null) {
-                    Toast.makeText(getContext(), "User created", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Error creating user:" +
-                            databaseError.toString(), Toast.LENGTH_SHORT).show();
-                }
+        FirebaseAction.write(user, (databaseError, databaseReference) -> {
+            if (databaseError == null) {
+                Toast.makeText(getContext(), "User created", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Error creating user:" +
+                        databaseError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
