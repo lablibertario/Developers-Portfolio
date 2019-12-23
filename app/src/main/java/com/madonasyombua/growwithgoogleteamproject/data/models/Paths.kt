@@ -12,15 +12,13 @@
         See the License for the specific language governing permissions and
         limitations under the License.
  */
-package com.madonasyombua.growwithgoogleteamproject.data.models;
+package com.madonasyombua.growwithgoogleteamproject.data.models
 
 /**
  * Firebase endpoint/nodes
  */
-
-public class Paths {
-
-  public static final String SL = "/";
-  static final String USER = "user";
-  public static final String FEED = "feeds";
+object Paths {
+    const val SL = "/"
+    const val USER = "user"
+    const val FEED = "feeds"
 }
